@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+
+{% load static %}
+
+
+
+<!-- title block -->
+{% block title %} {% endblock title %}
+
+
+<!-- header section -->
+{% block header %}
+    {% include "home/detailheader.html" %}
+{% endblock header %}
+
+
+<!-- Content section -->
+{% block content %}
+<!-- -------------------- CONTENT/BODY -------------------------- -->
+<section class="blog-posts grid-system">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="all-blog-posts">
+          <div class="row">
+            {% if search %}
+              {% for item in search %}
+                <div class="col-lg-6">
+                  <div class="blog-post">
+                    <div class="blog-thumb">
+                      <img src="{{ item.cover_img.url }}" alt="">
+                    </div>
+                    <div class="down-content">
+                      <span>{{ item.category }}</span>
+                      <a href="{% url 'myblog:details' item.pk item.slug  %}"><h4>{{ item.title }}</h4></a>
+                      <ul class="post-info">
+                        <!-- <li><a href="#">Admin</a></li> -->
+                        <li><a href="#">{{ item.updated.date }}</a></li>
+                        {% if item.comments.count > 0 %}
+                          <li><a href="{% url 'myblog:details' item.pk item.slug  %}">{{ item.comments.count }} Comments</a></li>                                    
+                        {% else %}
+                          <li><a href="{% url 'myblog:details' item.pk item.slug  %}">0 comment</a></li>
+                        {% endif %}
+                      </ul>
+                      <p>{{ item.description | safe }}</p>
+                      <div class="post-options">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <ul class="post-tags">
+                              <li><i class="fa fa-tags"></i></li>
+                              {% for tag in item.tags.all %}
+                                  <li><a href="{% url 'myblog:tutorial_by_tag' tag.slug %}">{{tag.name}}</a>,</li>
+                      
+                                  {% if not forloop.last %}, {% endif %}
+                              {% endfor %}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>                  
+              {% endfor %}
+            {% else %}
+              <p>
+                <h5>Sorry we can't find what you looking for</h5>
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="sidebar">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="sidebar-item search" id="exampleModalScrollable1">
+                <form id="search_form" name="gs" method="POST" action="{% url 'myblog:search' %}">
+                {% csrf_token %}
+                  <input type="text" name="itemsearch" class="searchText" placeholder="type to search..." autocomplete="on">
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="sidebar-item recent-posts">
+                <div class="sidebar-heading">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="content">
+                  <ul>
+                    {% if newly %}
+                      {% for item in newly %}
+                        <li><a href="{% url 'myblog:details' item.pk item.slug %}">
+                          <h5>{{item.title}}</h5>
+                          <span>{{item.created.date}}</span>
+                        </a></li>
+                      {% endfor %}
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="sidebar-item categories">
+                <div class="sidebar-heading">
+                  <h2>Categories</h2>
+                </div>
+                <div class="content">
+                  <ul>
+                    {% if cates %}
+                      {% for i in cates %}
+                        <li><a href="{% url 'myblog:categories_by_category' i.slug %}">- {{i.name}}</a></li>
+                      {% endfor %}
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="sidebar-item tags">
+                <div class="sidebar-heading">
+                  <h2>Tag Clouds</h2>
+                </div>
+                <div class="content">
+                  <ul>
+                    {% for item in all_stories %}
+                      {% if all_stories %}
+                        {% for tag in item.tags.all %}
+                          <li><a href="{% url 'myblog:tutorial_by_tag' tag.slug %}">{{tag.name}}</a></li>
+                          {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                                                              
+                      {% endif %}
+              
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+
+
+<!-- footer section -->
+{% block footer %}
+  {% include "home/footer.html" %}
+{% endblock footer %}

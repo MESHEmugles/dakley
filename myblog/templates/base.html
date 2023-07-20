@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="description" content="Get different Novice to Professional mistakes/errors and solutions"/>
+  <meta name="keywords" content="Django, Python, errors, Mistakes, Meshe, Solution"/>
+  <meta name="author" content="Da'kley">
+  <meta property="og:site_name" content="dakley"/>
+  <meta property="og:url" content="dakley.pythonanywhere.com"/>
+  <meta property="og:title" content="Home - Dakley - Mistakes with Solutions"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="MobileOptimized" content="width"/>
+  <meta name="HandheldFriendly" content="true"/>
+  <meta name="msapplication-TileColor" content="#0A0A0C"/>
+  <meta name="theme-color" content="#0A0A0C"/>
+  <meta name="google-site-verification" content="" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- favicon logo -->
+  <link rel="shortcut icon" href="{% static '' %}assets/images/meshe.jpg" type="image/x-icon">
+
+  <!-- font family -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <!-- font awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+  
+  <!-- Bootstrap core CSS -->
+  <link href="{% static '' %}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- aos link -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="{% static '' %}assets/css/fontawesome.css">
+  <link rel="stylesheet" href="{% static '' %}assets/css/templatemo-stand-blog.css">
+  <link rel="stylesheet" href="{% static '' %}assets/css/owl.css">
+  <title>Da'Kley {% block title %} {% endblock title %}</title>
+</head>
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <!-- <div id="preloader">
+    <div class="jumper">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>   -->
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ----------------------- head --------------------- -->
+  {% block header %}
+      
+  {% endblock header %}
+
+
+  <!-- ----------------------- content ------------------------ -->
+  {% block content %}
+    
+  {% endblock content %}
+  
+  <!-- -------------------------- footer -------------------------------- -->
+  {% block footer %}
+      
+  {% endblock footer %}
+
+  
+  <!-- Bootstrap core JavaScript -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script src="{% static '' %}vendor/jquery/jquery.min.js"></script>
+  <script src="{% static '' %}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Additional Scripts -->
+  <script src="{% static '' %}assets/js/custom.js"></script>
+  <script src="{% static '' %}assets/js/owl.js"></script>
+  <script src="{% static '' %}assets/js/slick.js"></script>
+  <script src="{% static '' %}assets/js/isotope.js"></script>
+  <script src="{% static '' %}assets/js/accordions.js"></script>
+
+  <script language = "text/Javascript"> 
+    cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+    function clearField(t){                   //declaring the array outside of the
+    if(! cleared[t.id]){                      // function makes it static and global
+        cleared[t.id] = 1;  // you could use true and false, but that's more typing
+        t.value='';         // with more chance of typos
+        t.style.color='#fff';
+        }
+    }
+  </script>
+  <!-- --------------- for parallax type styling ---------------- -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- <script src="{% static '' %}js/script.js"></script> -->
+  <script>
+    AOS.init();
+  </script>
+  <script>
+    $(document).ready(function(){
+      $(document).on('click', '#like', function(e){
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '{% url "blogstory:like" %}',
+          data: {
+            post_id: $('#like').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+            },
+            success: function(json){
+              document.getElementById('like_count').innerHTML = json['liking']
+              console.log(json)
+            },
+            error: function(rs, e){
+              console.log(rs.responseText);
+            },
+        });
+      });
+    })
+  </script>
+</body>
+</html>

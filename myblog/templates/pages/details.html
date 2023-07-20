@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% load social_share %}
+{% load static %}
+
+
+
+<!-- title block -->
+{% block title %} {% endblock title %}
+
+
+<!-- header section -->
+{% block header %}
+    {% include "home/detailheader.html" %}
+{% endblock header %}
+
+
+<!-- Content section -->
+{% block content %}
+
+<section class="blog-posts grid-system mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-twelve">
+
+                                <article class="format-gallery">  
+                        
+                                    <div class="content-media">
+                                        <div class="post-slider flexslider">
+                                            <ul class="slides">
+                                                <li>
+                                                    <img src="{{ detail.cover_img.url }}" class="img-fluid"> 
+                                                </li>
+                                            </ul>							
+                                        </div> 
+                                    </div>
+                        
+                                    <div class="primary-content">
+                        
+                                        <h1 class="entry-title">{{ detail.title }}</h1>	
+                            
+                                        <ul class="entry-meta">
+                                            <li class="date">{{detail.created.date}}</li>						
+                                            <li class="cat"><a href="">Wordpress</a><a href="">Design</a></li>
+                                            <span class="" id="like_count">{{ detail.like_count }}</span>
+                                            <button class="btn btn-transparent border-0 btn-sm" id="like" type='submit' value='{{detail.pk}}'><i class="fa fa-heart" style="font-size: 1rem; color: red;"></i></button>			
+                                            {% comment %} <form action="{% url 'myblog:like_rating' %}" method="POST">
+                                            {% csrf_token %}
+                                                <input type="hidden" name="like" value="1">
+                                                <input type="hidden" name="likerating" value="{{detail.pk}}">
+                                                <button class="btn btn-transparent border-0 btn-sm" type="submit"><i class="fa fa-heart" style="font-size: 1rem; color: red;"></i></button>			
+                                            </form> {% endcomment %}
+                                        </ul>						
+                            
+                                        <p class="lead">
+                                            {% if detail.video.exist %}
+                                                {{detail.video}}
+                                            {% else %}
+                                            
+                                            {% endif %}
+
+                                            {{detail.description| safe}}
+                                        </p> 
+                        
+                                        <div class="down-content">
+                                            <div class="post-options">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <ul class="post-tags">
+                                                            <li><i class="fa fa-tags"></i></li>
+                                                            {% if detail %}
+                                                                {% for tag in detail.tags.all %}
+                                                                    <li><a href="{% url 'myblog:tutorial_by_tag' tag.slug %}">{{tag.name}}</a>,</li>
+                                                        
+                                                                    {% if not forloop.last %}, {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                    <ul class="post-share">
+                                                        <li><i class="fa fa-share-alt"></i></li>
+                                                        {% comment %} <li><i class="fa fa-facebook-f" style="font-size: 1.2rem;"></i></li>
+                                                        <li><i class="fa fa-twitter" style="font-size: 1.2rem;"></i></li> {% endcomment %}
+                                                        <li>{% post_to_facebook object_or_url '<i class="fa fa-facebook-f" style="font-size: 1.2rem;"></i>' %}</li>
+                                                        <li>{% post_to_twitter "New Content: {{item.title}}" object_or_url '<i class="fa fa-twitter" style="font-size: 1.2rem;"></i>' %}</li>
+                                                    </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pags">
+                                            <div class="pagin">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <ul class="pag-previous">
+                                                            {% if previous_ln %}
+                                                                <a href="{% url 'myblog:details' previous_ln.pk previous_ln %}" class="" id="previous">{{previous_ln | truncatewords:03}}</a>
+                                                            {% else %}
+                                                                <a href="{% url 'myblog:index' %}" class="" id="previous">Home</a>
+                                                            {% endif %}
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <ul class="pag-next">
+                                                            {% if next_ln %}
+                                                                <a href="{% url 'myblog:details' next_ln.pk next_ln %}" class="" id="next">{{next_ln| truncatewords:03}}</a>
+                                                            {% else %}
+                                                                <a href="{% url 'myblog:index' %}" class="" id="next">Home</a>
+                                                            {% endif %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="author-thumb" id="thumb">
+                                            <img src="{{abtme.image.url}}" class="img-fluid rounded-circle" width="50">
+                            
+                                            <div class="right-content-author">
+                                                <div>
+                                                    <span class="h5 my-0 py-0">{{abtme.name}}</span> <br>
+                                                    {{abtme.wahudo}}
+                                                </div>
+
+                                                <p> {{abtme.aboutyu| safe}} </p>
+                            
+                                                <ul class="author-social">
+                                                    <li><a href="#"><i class="fa fa-facebook-f"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-twitter"></i></i></a></li>					        	
+                                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-whatsapp"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div> <!-- end author-profile -->						
+                        
+                                    </div> <!-- end entry-primary -->		  			   
+                        
+                                    
+                        
+                                </article>
+                            
+                    
+                            </div> <!-- end col-twelve -->
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item comments">
+                                <div class="sidebar-heading">
+                                    {% if number_of_comments %}
+                                        <h2>{{ number_of_comments }} comments</h2>
+                                    {% else %}
+                                        0 comment                           
+                                    {% endif %}
+                                </div>
+                            <div class="content">
+                                <ul>
+                                    {% if tutocom %}
+                                        {% for item in tutocom %}
+                                            <li>
+                                                <div class="author-thumb">
+                                                    <img src="{% static '' %}assets/images/avatar.png" alt="">
+                                                </div>
+                                                <div class="right-content">
+                                                    <h4>{{ item.name }}<span>{{ item.created.date }}</span></h4>
+                                                    <p>{{ item.comment }}</p>
+                                                </div>
+                                                {% comment "" %}
+                                                    <form action="{% url 'myblog:remove_tutorial_comment' detail.pk detail.slug %}" method="POST">
+                                                    {% csrf_token %}
+                                                        <input type="hidden" name="deletebeat" value="{{item.id}}">
+                                                        <button type="submit" class=" border-0 bg-transparent text-primary"><small> Delete</small></button>
+                                                    </form>
+                                                {% endcomment %}  
+                                            </li>
+                                            {% comment %} <li class="replied">
+                                                <div class="author-thumb">
+                                                    <img src="{% static '' %}assets/images/comment-author-02.jpg" alt="">
+                                                </div>
+                                                <div class="right-content">
+                                                    <h4>Thirteen Man<span>May 20, 2020</span></h4>
+                                                    <p>In porta urna sed venenatis sollicitudin. Praesent urna sem, pulvinar vel mattis eget.</p>
+                                                </div>
+                                            </li> {% endcomment %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- comment -->
+                        <div class="col-lg-12">
+                            <div class="sidebar-item submit-comment">
+                                <div class="sidebar-heading">
+                                    <h2>Your comment</h2>
+                                </div>
+                                <div class="content">
+                                    <form id="comment" action="{% url 'myblog:details' detail.pk detail.slug %}" method="POST">
+                                    {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <fieldset>
+                                                    {{ comment.name }}
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <fieldset>
+                                                    {{ comment.email }}
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <fieldset>
+                                                    {{ comment.comment }}
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <fieldset>
+                                                    <button type="submit" id="form-submit" class="main-button">Submit</button>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="sidebar">
+                <div class="row">
+                <div class="col-lg-12">
+                    <div class="sidebar-item search" id="search">
+                        <form id="search_form" name="gs" method="POST" action="{% url 'myblog:search' %}">
+                        {% csrf_token %}
+                          <input type="text" name="itemsearch" class="searchText" placeholder="type to search..." autocomplete="on">
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="sidebar-item recent-posts">
+                    <div class="sidebar-heading">
+                        <h2>Recent Posts</h2>
+                    </div>
+                    <div class="content">
+                        <ul>
+                            {% if newly %}
+                                {% for item in newly %}
+                                    <li><a href="{% url 'myblog:details' item.pk item.slug %}">
+                                        <h5>{{item.title}}</h5>
+                                        <span>{{item.created.date}}</span>
+                                    </a></li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="sidebar-item categories">
+                    <div class="sidebar-heading">
+                        <h2>Categories</h2>
+                    </div>
+                    <div class="content">
+                        <ul>
+                            {% if cates %}
+                                {% for i in cates %}
+                                    <li><a href="{% url 'myblog:categories_by_category' i.slug %}">- {{i.name}}</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="sidebar-item tags">
+                    <div class="sidebar-heading">
+                        <h2>Tag Clouds</h2>
+                    </div>
+                    <div class="content">
+                        <ul>
+                            {% for item in newly %}
+                                {% if newly %}
+                                    {% for tag in item.tags.all %}
+                                        <li><a href="{% url 'myblog:tutorial_by_tag' tag.slug %}">{{tag.name}}</a></li>
+                                        {% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                                                        
+                                {% endif %}                  
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+
+
+<!-- footer section -->
+{% block footer %}
+  {% include "home/footer.html" %}
+{% endblock footer %}

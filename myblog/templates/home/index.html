@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% load hitcount_tags %}
+{% comment %} {% load social_share %} {% endcomment %}
+
+
+{% load static %}
+
+
+
+<!-- title block -->
+{% block title %} {% endblock title %}
+
+
+<!-- header section -->
+{% block header %}
+    {% include "home/header.html" %}
+{% endblock header %}
+
+
+<!-- Content section -->
+{% block content %}
+<!-- Banner Starts Here -->
+<div class="main-banner header-text">
+    <div class="container-fluid">
+        <div class="owl-banner owl-carousel">
+            {% if tuto %}
+                {% for item in tuto %}
+                    {% if forloop.counter|divisibleby:2 %}
+                        <div class="item">
+                            <img src="{{ item.cover_img.url }}" alt="">
+                            <div class="item-content">
+                                <div class="main-content">
+                                    <div class="meta-category">
+                                        <span>{{ item.category }}</span>
+                                    </div>
+                                    <a href="{% url 'myblog:details' item.pk item.slug  %}"><h4>{{ item.title }}</h4></a>
+                                    <ul class="post-info">
+                                        <!-- <li><a href="#">Admin</a></li> -->
+                                        <li><a href="#">{{ item.created.date }}</a></li>
+                                        {% if item.comments.count > 0 %}
+                                            <li><a href="{% url 'myblog:details' item.pk item.slug  %}">{{ item.comments.count }} Comments</a></li>                                    
+                                        {% else %}
+                                            <li><a href="{% url 'myblog:details' item.pk item.slug  %}">0 comment</a></li>
+                                        {% endif %}
+                                        <li><a href="{% url 'myblog:details' item.pk item.slug  %}">{{ item.like_count }} likes</a></li> 
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- Banner Ends Here -->
+
+<section class="blog-posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        {% if tuto %}
+                            {% for item in tuto %}
+                                <div class="col-lg-12">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            <img src="{{ item.cover_img.url }}" alt="">
+                                        </div>
+                                        <div class="down-content">
+                                            <strong>{{ item.category }}</strong>
+                                            <a href="{% url 'myblog:details' item.pk item.slug  %}"><h4>{{ item.title }}</h4></a>
+                                            <ul class="post-info">
+                                                <!-- <li><a href="#">Admin</a></li> -->
+                                                <li><a href="#">{{ item.updated.date }}</a></li>
+                                                {% if item.comments.count > 0 %}
+                                                    <li><a href="{% url 'myblog:details' item.pk item.slug  %}">{{ item.comments.count }} Comments</a></li>                                    
+                                                {% else %}
+                                                    <li><a href="{% url 'myblog:details' item.pk item.slug  %}">0 comment</a></li>
+                                                {% endif %}
+                                                <li><a href="{% url 'myblog:details' item.pk item.slug  %}">{{ item.like.count }} likes</a></li>                                    
+                                            </ul>
+                                            {{ item.description | safe | truncatewords:50 }}
+                                            <div class="post-options">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <ul class="post-tags">
+                                                            <li><i class="fa fa-tags"></i></li>
+                                                            {% for tag in item.tags.all %}
+                                                                <li><a href="{% url 'myblog:tutorial_by_tag' tag.slug %}">{{tag.name}}</a>,</li>
+                                                                {% if not forloop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <ul class="post-share">
+                                                            <li style="margin-left: -5rem;"><i class="fa fa-share-alt"></i></li>
+                                                            {% comment %} <li>{% post_to_facebook object_or_url '<i class="fa fa-facebook-f" style="font-size: 1.2rem;"></i>' %}</li>
+                                                            <li>{% post_to_twitter "New Content: {{item.title}}" object_or_url '<i class="fa fa-twitter" style="font-size: 1.2rem;"></i>' %}</li> {% endcomment %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <div class="main-button">
+                                <a href="{% url 'myblog:all_stories' %}">View All Posts</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4" id="search">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item search">
+                                <form id="search_form" name="gs" method="POST" action="{% url 'myblog:search' %}">
+                                {% csrf_token %}
+                                  <input type="text" name="itemsearch" class="searchText" placeholder="type to search..." autocomplete="on">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item recent-posts">
+                                <div class="sidebar-heading">
+                                    <h2>Recent Posts</h2>
+                                </div>
+                                <div class="content">
+                                    <ul>
+                                        {% if newly %}
+                                            {% for item in newly %}
+                                                <li><a href="{% url 'myblog:details' item.pk item.slug %}">
+                                                    <h5>{{item.title}}</h5>
+                                                    <span>{{item.created.date}}</span>
+                                                </a></li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item categories">
+                                <div class="sidebar-heading">
+                                    <h2>Categories</h2>
+                                </div>
+                                <div class="content">
+                                    <ul>
+                                        {% if cates %}
+                                            {% for i in cates %}
+                                                <li><a href="{% url 'myblog:categories_by_category' i.slug %}">- {{i.name}}</a></li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="sidebar-item tags">
+                                <div class="sidebar-heading">
+                                    <h2>Tag Clouds</h2>
+                                </div>
+                                <div class="content">
+                                    <ul>
+                                        {% for item in tuto %}
+                                            {% if tuto %}
+                                                {% for tag in item.tags.all %}
+                                                    <li><a href="{% url 'myblog:tutorial_by_tag' tag.slug %}">{{tag.name}}</a></li>
+                                                    {% if not forloop.last %}, {% endif %}
+                                                {% endfor %}
+                                                                                    
+                                            {% endif %}
+                                    
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+
+
+<!-- footer section -->
+{% block footer %}
+  {% include "home/footer.html" %}
+{% endblock footer %}
